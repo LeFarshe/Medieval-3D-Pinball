@@ -1,0 +1,60 @@
+[gd_scene load_steps=6 format=3 uid="uid://btcy7c6nkxu47"]
+
+[ext_resource type="ArrayMesh" uid="uid://d2obo3cjd5nvs" path="res://GameObjects/Models/bumpers.obj" id="1_h6q3c"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jn7xu"]
+emission_enabled = true
+emission = Color(0.470588, 0.988235, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vilix"]
+albedo_color = Color(1, 1, 0.529412, 1)
+
+[sub_resource type="GDScript" id="GDScript_65lqp"]
+script/source = "extends MeshInstance3D
+
+@export var power = 15
+
+var shrinkMax = 0.8
+var shrinkCurrent = 0
+var growSpeed = 10
+var shrink
+
+func _ready():
+	shrink = position.y - shrinkMax
+
+func _process(delta):
+	if shrinkCurrent > 0:
+		position.y += growSpeed * delta
+		shrinkCurrent -= growSpeed * delta
+	
+
+func _on_area_3d_body_entered(body):
+	position.y = shrink
+	shrinkCurrent = shrinkMax
+	var angle: Vector3 = position - body.position
+	angle.y = -angle.y / power
+	body.apply_impulse(-angle.normalized() * power)
+	
+	ScoreCounter.addScore(ScoreCounter.Components.BUMPER)
+"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y3q3j"]
+radius = 0.05
+height = 0.15
+
+[node name="Bumper" type="MeshInstance3D"]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
+mesh = ExtResource("1_h6q3c")
+surface_material_override/0 = SubResource("StandardMaterial3D_jn7xu")
+surface_material_override/1 = SubResource("StandardMaterial3D_vilix")
+script = SubResource("GDScript_65lqp")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000559187, 0.0593363, -0.000662923)
+shape = SubResource("CapsuleShape3D_y3q3j")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

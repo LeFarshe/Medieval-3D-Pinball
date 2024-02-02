@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://d1h46oxt5xihp"]
+
+[ext_resource type="ArrayMesh" uid="uid://cqn8vrogs4lmy" path="res://GameObjects/Models/flippers.obj" id="1_cetnx"]
+[ext_resource type="Script" path="res://GameObjects/Flipper.gd" id="2_xit4x"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3cak0"]
+albedo_color = Color(0.627451, 0, 0.0941176, 1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_kuryr"]
+data = PackedVector3Array(0.0342, 0.0361, -0.1835, 0.0342, -0.0165, -0.1835, 0.0152, 0.0625, 0.0048, 0.0152, 0.0625, 0.0048, 0.0342, -0.0165, -0.1835, 0.0152, -0.0154, 0.0048, -0.0016, 0.0625, 0.0137, -0.0016, -0.0154, 0.0137, -0.0163, 0.0625, 0.0014, -0.0163, 0.0625, 0.0014, -0.0016, -0.0154, 0.0137, -0.0163, -0.0154, 0.0014, 0.0342, -0.0165, -0.1835, 0.0236, -0.0165, -0.1953, 0.0152, -0.0154, 0.0048, 0.0152, -0.0154, 0.0048, 0.0236, -0.0165, -0.1953, -0.0016, -0.0154, 0.0137, 0.0107, 0.0361, -0.186, 0.0236, 0.0361, -0.1953, -0.0163, 0.0625, 0.0014, -0.0163, 0.0625, 0.0014, 0.0236, 0.0361, -0.1953, -0.0016, 0.0625, 0.0137, -0.0163, 0.0625, 0.0014, -0.0163, -0.0154, 0.0014, 0.0107, 0.0361, -0.186, 0.0107, 0.0361, -0.186, -0.0163, -0.0154, 0.0014, 0.0107, -0.0165, -0.186, 0.0342, 0.0361, -0.1835, 0.0236, 0.0361, -0.1953, 0.0342, -0.0165, -0.1835, 0.0342, -0.0165, -0.1835, 0.0236, 0.0361, -0.1953, 0.0236, -0.0165, -0.1953, 0.0236, 0.0361, -0.1953, 0.0107, 0.0361, -0.186, 0.0236, -0.0165, -0.1953, 0.0236, -0.0165, -0.1953, 0.0107, 0.0361, -0.186, 0.0107, -0.0165, -0.186, 0.0236, 0.0361, -0.1953, 0.0342, 0.0361, -0.1835, -0.0016, 0.0625, 0.0137, -0.0016, 0.0625, 0.0137, 0.0342, 0.0361, -0.1835, 0.0152, 0.0625, 0.0048, 0.0236, -0.0165, -0.1953, 0.0107, -0.0165, -0.186, -0.0016, -0.0154, 0.0137, -0.0016, -0.0154, 0.0137, 0.0107, -0.0165, -0.186, -0.0163, -0.0154, 0.0014, 0.0152, 0.0625, 0.0048, 0.0152, -0.0154, 0.0048, -0.0016, 0.0625, 0.0137, -0.0016, 0.0625, 0.0137, 0.0152, -0.0154, 0.0048, -0.0016, -0.0154, 0.0137)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_0xat5"]
+points = PackedVector3Array(0.15, -0.05, -0.11, 0.15, 0.05, -0.11, 0, 0.05, -0.2, 0, -0.05, -0.2, -0.04, -0.05, 0.02, -0.04, 0.05, 0.02, 0.05, -0.05, 0, 0.05, 0.05, 0)
+
+[node name="Flipper" type="MeshInstance3D"]
+mesh = ExtResource("1_cetnx")
+surface_material_override/0 = SubResource("StandardMaterial3D_3cak0")
+script = ExtResource("2_xit4x")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_kuryr")
+
+[node name="FlipperLaunchArea" type="Area3D" parent="."]
+transform = Transform3D(0.811064, 0, 0.584958, 0, 1, 0, -0.584958, 0, 0.811064, 0, 0, 0)
+collision_layer = 2
+collision_mask = 2
+
+[node name="FlipperCollisionShape" type="CollisionShape3D" parent="FlipperLaunchArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00549646, -0.000282139, -0.0169411)
+shape = SubResource("ConvexPolygonShape3D_0xat5")
